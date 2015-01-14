@@ -1,0 +1,10 @@
+[remote]
+host    = <webserver>
+port    = <webserver port>
+
+[dev]
+dev = False
+
+[authorization]
+ldap_username =
+keyring = invtool-ldap

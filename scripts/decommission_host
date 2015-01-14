@@ -1,0 +1,39 @@
+#!/bin/bash
+
+## decommission_host
+## bburton
+## v0.1.5 - 2014-02-26
+
+if [ $# -lt 1 ]
+then
+echo "Usage: $0 <hostname> <bug number>"
+   exit 1
+fi
+
+if [ $# -lt 2 ]
+then
+echo "Usage: $0 <hostname> <bug number>"
+   exit 1
+fi
+
+SERVER=$1
+BUG="bug $2"
+PTR=$(dig +short $SERVER)
+PK=$(invtool SYS detail --hostname $SERVER | grep pk: | awk '{print $2}')
+IS_DECOMMISSIONED=$(invtool --json SYS detail --hostname $SERVER | python -c 'import sys, json; print json.load(sys.stdin)[sys.argv[1]]' system_status | grep -v decommissioned)
+
+if [ -z "$PK" ]
+then
+	echo "$SERVER is not in inventory"
+	exit 1
+
+elif [ -z "$IS_DECOMMISSIONED" ]
+then
+	echo "$SERVER is already decommissioned"
+	exit 1
+else
+	echo "updating $SERVER in inventory to be decommissioned"
+	invtool decommission --commit --comment "$BUG" $SERVER
+	invtool --silent SYS update --hostname $SERVER --notes "$SERVER - IP was: $PTR -- $BUG"
+
+fi

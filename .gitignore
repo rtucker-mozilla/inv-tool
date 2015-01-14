@@ -3,12 +3,11 @@
 # Packages
 *.egg
 *.egg-info
-dist
 build
 eggs
 parts
-bin
 var
+dist
 sdist
 develop-eggs
 .installed.cfg
@@ -24,4 +23,14 @@ pip-log.txt
 *.mo
 
 #Mr Developer
-.mr.developer.cfg
+config.cfg
+etc/invtool.conf
+etc/invtool.conf.bak
+
+# Stuff
+inv
+devinvtool
+bug_*
+*.sh  # top level scripts
+
+*.csv
